@@ -2,13 +2,13 @@ import serial
 import time
 import Interface
 
-#most of this code is based on the information available on this page: https://playground.arduino.cc/interfacing/python so check it out if shit ain't working! (installed python versions change how serial messages work)
+#most of this code is based on the information available on this page: https://playground.arduino.cc/interfacing/python so check it out if things aren't working! (installed python versions change how serial messages work, for example.)
 
 def sendMessage():
 	#the connection should also be allowed to establish in Arduino code. This is done with Serial.begin(9600); in the setup() method on the Arduino.
 	ser = serial.Serial('COM3', 9600) #connects to the arduino via USB-port 3, at BAUD-rate 9600
 	print("Establishing connection...")
-	time.sleep(2) #sleep is necessary to establish a connection with the arduino
+	time.sleep(2) #sleep is necessary to establish a connection with the arduino on windows machines
 
 	ser.timeout = 0.5	#sets the timeout for serial port reading. this means that dropped bytes in the serial connection don't block up the entire stream by waiting for something
 						#that will never arrive.
