@@ -20,7 +20,7 @@ PrintMacros.returnInput(inputprompt)
 PrintMacros.drawDivider()
 #end
 
-#gets html from url and urladdition and prints it out listed by divs
+#gets html from url and urladdition & puts it into a string
 htmlAsStringList = WebInteraction.httpsGETRequestSplit(url, urladdition)
 
 #header ascii print for the received html
@@ -30,13 +30,13 @@ print("HTML AS LIST OF STRINGS BASED ON DIVS: ")
 PrintMacros.drawDivider()
 PrintMacros.drawDivider()
 
-#prints all divs
+#prints all divs that pass through divfilter
 for x in htmlAsStringList:
 
 	#save sanitized string to print into variable because we have to check against it twice anyway
 	sanstring = PrintMacros.sanitizeHTMLString(x) 
 	
-	#checks if this div contains one of the strings we filter by (from divfilter)
+	#checks if this div contains one of the strings (f) we filter by (divfilter)
 	for f in divfilter:
 
 		if f in sanstring: 
