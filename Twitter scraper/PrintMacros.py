@@ -41,4 +41,4 @@ def sanitizeHTMLString(str_in):
 			badChar = False
 			
 
-	return str_out
+	return str_out #return the sanitized HTML string

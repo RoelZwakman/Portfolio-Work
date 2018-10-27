@@ -36,11 +36,13 @@ for x in htmlAsStringList:
 	#save sanitized string to print into variable because we have to check against it twice anyway
 	sanstring = PrintMacros.sanitizeHTMLString(x) 
 	
-	#checks if this div contains one of the two filters
-	if divfilter[0] in sanstring or divfilter[1] in sanstring:
-		PrintMacros.drawDivider()
-		print(sanstring) #prints div if it passes the filter
-		PrintMacros.drawDivider()
+	#checks if this div contains one of the strings we filter by (from divfilter)
+	for f in divfilter:
+
+		if f in sanstring: 
+			PrintMacros.drawDivider()
+			print(sanstring) #prints div if it passes the filter
+			PrintMacros.drawDivider()
 
 #end of program
 PrintMacros.drawDivider()
