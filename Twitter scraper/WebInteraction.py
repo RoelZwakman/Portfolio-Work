@@ -2,7 +2,7 @@ import http.client
 import time
 import PrintMacros
 
-#source: https://docs.python.org/3/library/http.client.html
+#function source: https://docs.python.org/3/library/http.client.html
 def httpsGETRequestRaw(base, addition):
 	print("SENDING HTTPS REQUEST...")
 	connection = http.client.HTTPSConnection(base)
