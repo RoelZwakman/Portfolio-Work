@@ -2,6 +2,14 @@ import sys
 import urllib.request
 from bs4 import BeautifulSoup
 
+"""
+THIS SCRIPT RUNS A SEARCH QUERY ON TWITTER AND RETURNS ALL HTML OF A PROVIDED TAG
+sys.argv[1] = search term
+sys.argv[2] = tag to filter
+
+Author: Roel Zwakman
+"""
+
 class twitter_searcher():
     def __init__(self):
         self.searchable_tags = ("div", "span", "li")
