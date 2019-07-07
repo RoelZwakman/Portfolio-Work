@@ -1,51 +1,55 @@
-import PrintMacros
-import WebInteraction
-import ToDoList
+import sys
+import urllib.request
+from bs4 import BeautifulSoup
 
-url = "twitter.com" #URL and /-addition. This is to make the code more reusable for stuff that isn't twitter searches.
-urladdition = "/search?f=tweets&vertical=news&q=abc&src=typd" #q=abc should be replaced with the query you want
+class twitter_searcher():
+    def __init__(self):
+        self.searchable_tags = ("div", "span", "li")
 
-divfilter = ["<li", "data-permalink-path"] #two entries because of twitter search page's HTML divs setup
+    def getSearch(self, search_query):
+        """Gets the HTML code as a string from the twitter search page for search_query"""
 
-#start
-#for initialising stuff that might be needed here
-print("Initialising...")
-PrintMacros.drawDivider()
-#end
+        request = urllib.request.urlopen(f'http://twitter.com/search?f=tweets&vertical=news&q={search_query}&src=typd')
+        html_as_bytes = request.read()
+        html_as_string = html_as_bytes.decode("utf8")
+        request.close()
+        return html_as_string
 
-#start
-#checks input and prints it back out
-inputprompt = PrintMacros.enterValue()
-PrintMacros.returnInput(inputprompt)
-PrintMacros.drawDivider()
-#end
+    def parseSearch(self, html, tag_to_search):
+        """Parses through unfiltered HTML in string-format and returns it parsed."""
 
-#gets html from url and urladdition & puts it into a string
-htmlAsStringList = WebInteraction.httpsGETRequestSplit(url, urladdition)
+        soup = BeautifulSoup(html, features="html.parser")
+        if tag_to_search in self.searchable_tags:
+            tag_results = soup.findAll(tag_to_search)
+            return tag_results
+        else:
+            return None
 
-#header ascii print for the received html
-PrintMacros.drawDivider()
-PrintMacros.drawDivider()
-print("HTML AS LIST OF STRINGS BASED ON DIVS: ")
-PrintMacros.drawDivider()
-PrintMacros.drawDivider()
+    def outputSearch(self, parsedResults):
+        """Prints parsedResults to the screen with dividers above and below."""
 
-#prints all divs that pass through divfilter
-for x in htmlAsStringList:
+        self.printDivider()
+        print(parsedResults)
+        self.printDivider()
 
-	#save sanitized string to print into variable because we have to check against it twice anyway
-	sanstring = PrintMacros.sanitizeHTMLString(x) 
-	
-	#checks if this div contains one of the strings (f) we filter by (divfilter)
-	for f in divfilter:
+    def printDivider(self):
+        """Prints a line divider to the screen."""
 
-		if f in sanstring: 
-			PrintMacros.drawDivider()
-			print(sanstring) #prints div if it passes the filter
-			PrintMacros.drawDivider()
+        print("-----------------------------------------------------------------")
 
-#end of program
-PrintMacros.drawDivider()
-ToDoList.printToDoList()
-quitprompt = input("Enter any input to close this window.")
-	
+
+def main():
+
+    twitsearch = twitter_searcher()
+
+    search_term = sys.argv[1]
+    tag_to_search = sys.argv[2]
+    output_unparsed = twitsearch.getSearch(search_term)
+    output_parsed = twitsearch.parseSearch(output_unparsed, tag_to_search)
+
+    if output_parsed == None:
+        print("The provided HTML-tag was not found on the page, or was not a searchable tag.")
+    else:
+        twitsearch.outputSearch(output_parsed)
+
+main()
